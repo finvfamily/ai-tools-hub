@@ -193,3 +193,33 @@ INSERT INTO nodes (name, slug, description, icon, sort_order) VALUES
   ('招募合作', 'recruit',   '寻找 AI 项目合伙人、协作者',           '🤝', 6),
   ('随便聊聊', 'general',   '和志同道合的人聊聊 AI 相关的一切',     '💬', 7)
 ON CONFLICT (slug) DO NOTHING;
+
+-- ============================================================
+-- RPCs
+-- ============================================================
+CREATE OR REPLACE FUNCTION increment_topic_views(topic_id uuid)
+RETURNS void AS $$
+  UPDATE topics SET view_count = view_count + 1 WHERE id = topic_id;
+$$ LANGUAGE sql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION increment_like_count(row_id uuid, row_table text)
+RETURNS void AS $$
+BEGIN
+  IF row_table = 'topics' THEN
+    UPDATE topics SET like_count = like_count + 1 WHERE id = row_id;
+  ELSIF row_table = 'replies' THEN
+    UPDATE replies SET like_count = like_count + 1 WHERE id = row_id;
+  END IF;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION decrement_like_count(row_id uuid, row_table text)
+RETURNS void AS $$
+BEGIN
+  IF row_table = 'topics' THEN
+    UPDATE topics SET like_count = GREATEST(like_count - 1, 0) WHERE id = row_id;
+  ELSIF row_table = 'replies' THEN
+    UPDATE replies SET like_count = GREATEST(like_count - 1, 0) WHERE id = row_id;
+  END IF;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;

@@ -1,18 +1,22 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { createAdminClient } from '@/lib/supabase/server'
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
 
-  // Must redirect first, then set cookies on the response object
-  const response = NextResponse.redirect(new URL('/community', origin))
+  // Read the post-login destination from the cookie set in the auth route
+  const rawNext = request.cookies.get('community_next')?.value ?? '/community'
+  const destination = decodeURIComponent(rawNext)
+  const response = NextResponse.redirect(new URL(destination, origin))
+
+  // Clear the cookie
+  response.cookies.set('community_next', '', { maxAge: 0, path: '/' })
 
   if (!code) return response
 
   // Use request/response cookie pattern — required in Route Handlers
-  // (cookies() from next/headers silently fails here)
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -34,7 +38,6 @@ export async function GET(request: Request) {
 
   if (!session?.user) return response
 
-  // Create community_users record directly here (internal fetch won't have cookies)
   const user = session.user
   const admin = await createAdminClient()
 

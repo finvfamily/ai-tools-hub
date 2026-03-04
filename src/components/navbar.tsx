@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Zap } from 'lucide-react'
+import { Zap, Github } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -43,11 +43,22 @@ export function Navbar() {
           </Link>
         </nav>
 
-        {/* Submit button */}
-        <Button asChild size="sm"
-          className="bg-violet-600 hover:bg-violet-500 text-white rounded-full px-5">
-          <Link href="/submit">Submit Tool</Link>
-        </Button>
+        <div className="flex items-center gap-3">
+          <a
+            href="https://github.com/finvfamily/ai-tools-hub"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white/40 hover:text-white transition-colors"
+          >
+            <Github className="w-5 h-5" />
+          </a>
+
+          {/* Submit button */}
+          <Button asChild size="sm"
+            className="bg-violet-600 hover:bg-violet-500 text-white rounded-full px-5">
+            <Link href="/submit">Submit Tool</Link>
+          </Button>
+        </div>
       </div>
     </header>
   )

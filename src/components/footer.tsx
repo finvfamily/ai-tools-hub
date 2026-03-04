@@ -17,7 +17,7 @@ export function Footer() {
             <Link href="/tools" className="hover:text-white/70 transition-colors">Browse</Link>
             <Link href="/submit" className="hover:text-white/70 transition-colors">Submit Tool</Link>
             <a
-              href="https://github.com"
+              href="https://github.com/finvfamily/ai-tools-hub"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-white/70 transition-colors"

@@ -152,14 +152,21 @@ ALTER TABLE replies         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE likes           ENABLE ROW LEVEL SECURITY;
 
 -- community_users
+DROP POLICY IF EXISTS "public read users"  ON community_users;
+DROP POLICY IF EXISTS "insert own user"    ON community_users;
+DROP POLICY IF EXISTS "update own user"    ON community_users;
 CREATE POLICY "public read users"     ON community_users FOR SELECT USING (true);
 CREATE POLICY "insert own user"       ON community_users FOR INSERT WITH CHECK (auth.uid() = auth_id);
 CREATE POLICY "update own user"       ON community_users FOR UPDATE USING (auth.uid() = auth_id);
 
 -- nodes
+DROP POLICY IF EXISTS "public read nodes"  ON nodes;
 CREATE POLICY "public read nodes"     ON nodes FOR SELECT USING (true);
 
 -- topics
+DROP POLICY IF EXISTS "public read topics" ON topics;
+DROP POLICY IF EXISTS "auth insert topic"  ON topics;
+DROP POLICY IF EXISTS "owner delete topic" ON topics;
 CREATE POLICY "public read topics"    ON topics FOR SELECT USING (true);
 CREATE POLICY "auth insert topic"     ON topics FOR INSERT WITH CHECK (
   auth.uid() IN (SELECT auth_id FROM community_users WHERE id = user_id)
@@ -169,6 +176,9 @@ CREATE POLICY "owner delete topic"    ON topics FOR DELETE USING (
 );
 
 -- replies
+DROP POLICY IF EXISTS "public read replies"  ON replies;
+DROP POLICY IF EXISTS "auth insert reply"    ON replies;
+DROP POLICY IF EXISTS "owner delete reply"   ON replies;
 CREATE POLICY "public read replies"   ON replies FOR SELECT USING (true);
 CREATE POLICY "auth insert reply"     ON replies FOR INSERT WITH CHECK (
   auth.uid() IN (SELECT auth_id FROM community_users WHERE id = user_id)
@@ -178,6 +188,9 @@ CREATE POLICY "owner delete reply"    ON replies FOR DELETE USING (
 );
 
 -- likes
+DROP POLICY IF EXISTS "public read likes"  ON likes;
+DROP POLICY IF EXISTS "auth insert like"   ON likes;
+DROP POLICY IF EXISTS "auth delete like"   ON likes;
 CREATE POLICY "public read likes"     ON likes FOR SELECT USING (true);
 CREATE POLICY "auth insert like"      ON likes FOR INSERT WITH CHECK (
   auth.uid() IN (SELECT auth_id FROM community_users WHERE id = user_id)

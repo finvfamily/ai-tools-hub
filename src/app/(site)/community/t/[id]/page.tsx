@@ -17,7 +17,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params
   const { data } = await getTopicById(id)
   if (!data) return {}
-  return { title: `${data.title} — Community` }
+  const d = data as any
+  const snippet = d.content?.replace(/[#*`>\-]/g, '').slice(0, 150).trim()
+  return {
+    title: d.title,
+    description: snippet || d.title,
+    alternates: { canonical: `/community/t/${id}` },
+    openGraph: {
+      title: `${d.title} — AI Tools Hub Community`,
+      description: snippet || d.title,
+      type: 'article',
+      images: [{ url: '/api/og/home', width: 1200, height: 630 }],
+    },
+  }
 }
 
 function timeAgo(date: string) {

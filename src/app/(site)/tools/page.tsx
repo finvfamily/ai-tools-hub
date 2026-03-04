@@ -1,4 +1,16 @@
+import type { Metadata } from 'next'
 import { Suspense, Fragment } from 'react'
+
+export const metadata: Metadata = {
+  title: 'Browse AI Tools',
+  description: 'Browse and filter hundreds of AI tools by category, pricing and use case. Find the best AI apps for writing, coding, design, productivity and more.',
+  alternates: { canonical: '/tools' },
+  openGraph: {
+    title: 'Browse AI Tools — AI Tools Hub',
+    description: 'Hundreds of curated AI tools, filtered by category and pricing.',
+    images: [{ url: '/api/og/home', width: 1200, height: 630 }],
+  },
+}
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { ToolCard } from '@/components/tool-card'

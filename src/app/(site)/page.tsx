@@ -1,4 +1,16 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: 'AI Tools Hub — Discover the Best AI Tools',
+  description: 'Discover, compare and submit the best AI tools of 2025. Curated directory of AI applications for productivity, writing, coding, image generation and more.',
+  alternates: { canonical: '/' },
+  openGraph: {
+    title: 'AI Tools Hub — Discover the Best AI Tools',
+    description: 'Curated directory of the best AI tools, updated daily.',
+    images: [{ url: '/api/og/home', width: 1200, height: 630, alt: 'AI Tools Hub' }],
+  },
+}
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ToolCard } from '@/components/tool-card'

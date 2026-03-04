@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://aitoolshub.com'
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ai-tools-hub-xi.vercel.app'
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -8,7 +8,12 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin', '/api/'],
+        disallow: [
+          '/admin',
+          '/api/community/',  // block community API but allow OG images
+          '/api/submit',
+          '/api/admin/',
+        ],
       },
     ],
     sitemap: `${BASE_URL}/sitemap.xml`,

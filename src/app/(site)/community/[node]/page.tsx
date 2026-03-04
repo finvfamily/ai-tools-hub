@@ -15,7 +15,16 @@ export async function generateMetadata({ params }: Props) {
   const { node } = await params
   const { data } = await getNodeBySlug(node)
   if (!data) return {}
-  return { title: `${data.name} — Community` }
+  return {
+    title: `${data.name} — Community`,
+    description: data.description,
+    alternates: { canonical: `/community/${node}` },
+    openGraph: {
+      title: `${data.name} — AI Tools Hub Community`,
+      description: data.description,
+      images: [{ url: '/api/og/home', width: 1200, height: 630 }],
+    },
+  }
 }
 
 export default async function NodePage({ params }: Props) {

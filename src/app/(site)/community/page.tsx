@@ -8,8 +8,14 @@ import { getCommunityUser } from '@/lib/queries/community'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Community — AI Tools Hub',
-  description: 'Discuss AI tools, share your creations and ideas with the community.',
+  title: 'Community',
+  description: 'Discuss AI tools, share projects and exchange ideas with AI creators. Join the open community on AI Tools Hub.',
+  alternates: { canonical: '/community' },
+  openGraph: {
+    title: 'Community — AI Tools Hub',
+    description: 'Discuss AI tools, share projects and exchange ideas with AI creators.',
+    images: [{ url: '/api/og/home', width: 1200, height: 630 }],
+  },
 }
 
 export const revalidate = 60

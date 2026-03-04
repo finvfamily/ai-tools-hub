@@ -18,13 +18,31 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params
   const { data: tool } = await getToolBySlug(slug)
   if (!tool) return {}
+
+  const t = tool as ToolWithRelations
+  const title = `${t.name} — AI Tool`
+  const description = t.description.length > 155
+    ? t.description.slice(0, 152) + '...'
+    : t.description
+
   return {
-    title: tool.name,
-    description: tool.description,
+    title,
+    description,
+    keywords: [t.name, 'AI tool', t.category?.name, 'artificial intelligence'].filter(Boolean),
+    alternates: {
+      canonical: `/tools/${slug}`,
+    },
     openGraph: {
-      title: tool.name,
-      description: tool.description,
-      images: [{ url: `/api/og/${slug}` }],
+      title,
+      description,
+      type: 'website',
+      images: [{ url: `/api/og/${slug}`, width: 1200, height: 630, alt: t.name }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [`/api/og/${slug}`],
     },
   }
 }
@@ -46,8 +64,28 @@ export default async function ToolDetailPage({ params }: Props) {
     ? await getRelatedTools(t.category_id, slug, 3)
     : { data: [] }
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: t.name,
+    description: t.description,
+    url: t.website_url,
+    applicationCategory: 'AIApplication',
+    ...(t.category && { applicationSubCategory: t.category.name }),
+    offers: {
+      '@type': 'Offer',
+      price: t.pricing_type === 'free' ? '0' : undefined,
+      priceCurrency: 'USD',
+      availability: 'https://schema.org/OnlineOnly',
+    },
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* Back */}
       <Link href="/tools"

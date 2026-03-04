@@ -1,7 +1,9 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, MessageSquare, Heart, Calendar } from 'lucide-react'
-import { getUserByUsername } from '@/lib/queries/community'
+import { ArrowLeft, MessageSquare, Heart } from 'lucide-react'
+import { getUserByUsername, getCommunityUser } from '@/lib/queries/community'
+import { createServerClient } from '@/lib/supabase/server'
+import { ProfileCard } from '@/components/profile-card'
 import type { Metadata } from 'next'
 
 interface Props {
@@ -13,19 +15,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: `${username} — Community` }
 }
 
-function timeAgo(date: string) {
-  const d = new Date(date)
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+function formatDate(date: string) {
+  return new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric', month: 'short', day: 'numeric',
+  })
 }
 
 export default async function UserProfilePage({ params }: Props) {
   const { username } = await params
-  const { data: profile } = await getUserByUsername(username)
+
+  const supabase = await createServerClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const [{ data: profile }, communityUserResult] = await Promise.all([
+    getUserByUsername(username),
+    user ? getCommunityUser(user.id) : Promise.resolve({ data: null }),
+  ])
 
   if (!profile) notFound()
 
   const p = profile as any
   const topics = (p.topics ?? []) as any[]
+  const isOwner = !!(communityUserResult.data?.username === username)
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-8">
@@ -37,36 +48,18 @@ export default async function UserProfilePage({ params }: Props) {
         Community
       </Link>
 
-      {/* Profile card */}
-      <div className="glass-card rounded-2xl p-6 sm:p-8">
-        <div className="flex items-start gap-5">
-          {p.avatar_url ? (
-            <img src={p.avatar_url} alt={p.username}
-              className="w-16 h-16 rounded-full ring-2 ring-white/10" />
-          ) : (
-            <div className="w-16 h-16 rounded-full bg-violet-600/30 flex items-center
-              justify-center text-2xl text-violet-400 font-bold ring-2 ring-white/10">
-              {p.username[0].toUpperCase()}
-            </div>
-          )}
-
-          <div className="flex-1 min-w-0">
-            <h1 className="text-xl font-bold text-white">{p.username}</h1>
-            {p.bio && <p className="text-sm text-white/50 mt-1">{p.bio}</p>}
-
-            <div className="flex items-center gap-5 mt-3 flex-wrap">
-              <span className="flex items-center gap-1.5 text-xs text-white/30">
-                <Calendar className="w-3.5 h-3.5" />
-                Joined {timeAgo(p.created_at)}
-              </span>
-              <span className="flex items-center gap-1.5 text-xs text-white/30">
-                <MessageSquare className="w-3.5 h-3.5" />
-                {p.post_count ?? 0} topics
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Profile card — with inline edit for owner */}
+      <ProfileCard
+        profile={{
+          username: p.username,
+          avatar_url: p.avatar_url,
+          bio: p.bio,
+          github_url: p.github_url,
+          post_count: p.post_count ?? 0,
+          created_at: p.created_at,
+        }}
+        isOwner={isOwner}
+      />
 
       {/* Topics */}
       <div className="space-y-4">
@@ -78,13 +71,14 @@ export default async function UserProfilePage({ params }: Props) {
           <div className="glass-card rounded-2xl divide-y divide-white/5">
             {topics.map((topic: any) => (
               <Link key={topic.id} href={`/community/t/${topic.id}`}
-                className="flex items-center justify-between px-5 py-4 group hover:bg-white/2 transition-colors">
+                className="flex items-center justify-between px-5 py-4 group
+                  hover:bg-white/[0.02] transition-colors">
                 <div className="flex-1 min-w-0 space-y-1">
                   {topic.node && (
                     <span className="text-xs text-violet-400">{topic.node.name}</span>
                   )}
-                  <p className="text-sm text-white/80 group-hover:text-white transition-colors
-                    truncate leading-snug">
+                  <p className="text-sm text-white/80 group-hover:text-white
+                    transition-colors truncate leading-snug">
                     {topic.title}
                   </p>
                 </div>
@@ -95,7 +89,7 @@ export default async function UserProfilePage({ params }: Props) {
                   <span className="flex items-center gap-1">
                     <Heart className="w-3 h-3" />{topic.like_count}
                   </span>
-                  <span className="hidden sm:block">{timeAgo(topic.created_at)}</span>
+                  <span className="hidden sm:block">{formatDate(topic.created_at)}</span>
                 </div>
               </Link>
             ))}

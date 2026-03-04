@@ -83,6 +83,11 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS replies_set_floor   ON replies;
+DROP TRIGGER IF EXISTS topics_reply_count  ON replies;
+DROP TRIGGER IF EXISTS nodes_topic_count   ON topics;
+DROP TRIGGER IF EXISTS users_post_count    ON topics;
+
 CREATE TRIGGER replies_set_floor
   BEFORE INSERT ON replies
   FOR EACH ROW EXECUTE FUNCTION set_reply_floor();

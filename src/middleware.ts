@@ -23,9 +23,10 @@ export async function middleware(request: NextRequest) {
     }
   )
 
+  // Refresh session — must be called in middleware for token rotation
   const { data: { user } } = await supabase.auth.getUser()
 
-  // 保护 /admin 路由（登录页除外）
+  // Protect /admin routes
   if (
     request.nextUrl.pathname.startsWith('/admin') &&
     !request.nextUrl.pathname.startsWith('/admin/login') &&
@@ -34,7 +35,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/admin/login', request.url))
   }
 
-  // 已登录访问登录页时直接跳到后台
   if (request.nextUrl.pathname.startsWith('/admin/login') && user) {
     return NextResponse.redirect(new URL('/admin', request.url))
   }
@@ -43,5 +43,9 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: [
+    '/admin/:path*',
+    '/community/:path*',
+    '/api/community/:path*',
+  ],
 }

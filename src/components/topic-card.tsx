@@ -50,7 +50,6 @@ export function TopicCard({ topic }: TopicCardProps) {
         <div className="flex items-center gap-2 min-w-0">
           {topic.node && (
             <Link href={`/community/${topic.node.slug}`}
-              onClick={e => e.stopPropagation()}
               className="shrink-0 text-[11px] px-2 py-0.5 rounded-full
                 bg-violet-500/10 text-violet-400 border border-violet-500/20
                 hover:bg-violet-500/20 transition-colors leading-none">
@@ -67,7 +66,6 @@ export function TopicCard({ topic }: TopicCardProps) {
         {/* Meta row */}
         <div className="flex items-center gap-2 mt-1 text-xs text-white/30">
           <Link href={`/community/u/${topic.user?.username}`}
-            onClick={e => e.stopPropagation()}
             className="hover:text-white/60 transition-colors">
             {topic.user?.username}
           </Link>

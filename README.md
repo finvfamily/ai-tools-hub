@@ -9,7 +9,7 @@
 [![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E)](https://supabase.com)
 [![Deploy with Vercel](https://img.shields.io/badge/Deploy-Vercel-black)](https://vercel.com)
 
-[**Report Bug**](https://github.com/finvfamily/ai-tools-hub/issues) · [**Suggest Feature**](https://github.com/finvfamily/ai-tools-hub/issues)
+[**🌐 Live Demo**](https://ai-tools-hub-xi.vercel.app) · [**Submit a Tool**](https://ai-tools-hub-xi.vercel.app/submit) · [**Report Bug**](https://github.com/finvfamily/ai-tools-hub/issues)
 
 ![AI Tools Hub Homepage](./docs/screenshots/homepage.jpg)
 
@@ -52,7 +52,7 @@
 Know a great AI tool that's missing? Two ways to add it:
 
 ### Option 1 — Web Form _(for everyone)_
-Visit the live site, go to `/submit`, fill in the details, and we'll review it within 48 hours.
+Visit [ai-tools-hub-xi.vercel.app/submit](https://ai-tools-hub-xi.vercel.app/submit), fill in the details, and we'll review it within 48 hours.
 
 ### Option 2 — Pull Request _(for developers)_
 Open an issue titled `[Tool Submission] Tool Name` with the tool URL and a one-line description. We'll add it and credit you in the commit history.
@@ -197,7 +197,7 @@ See [`supabase/schema.sql`](./supabase/schema.sql) for the complete schema.
 
 All contributions are welcome!
 
-- **Submit an AI tool** → Use the web form on the live site or open an issue
+- **Submit an AI tool** → [Use the web form](https://ai-tools-hub-xi.vercel.app/submit) or open an issue
 - **Fix a bug** → Fork, fix, open a PR
 - **Improve the UI** → Fork, tweak, open a PR
 - **Suggest a category** → Open a discussion

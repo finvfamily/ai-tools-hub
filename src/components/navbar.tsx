@@ -2,11 +2,21 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Zap, Github } from 'lucide-react'
+import { Zap, Github, MessageSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-export function Navbar() {
+interface CommunityUser {
+  id: string
+  username: string
+  avatar_url: string | null
+}
+
+interface NavbarProps {
+  communityUser?: CommunityUser | null
+}
+
+export function Navbar({ communityUser }: NavbarProps) {
   const pathname = usePathname()
 
   return (
@@ -41,6 +51,16 @@ export function Navbar() {
           >
             Categories
           </Link>
+          <Link
+            href="/community"
+            className={cn(
+              'text-sm transition-colors flex items-center gap-1.5',
+              pathname.startsWith('/community') ? 'text-white' : 'text-white/50 hover:text-white'
+            )}
+          >
+            <MessageSquare className="w-3.5 h-3.5" />
+            Community
+          </Link>
         </nav>
 
         <div className="flex items-center gap-3">
@@ -52,6 +72,29 @@ export function Navbar() {
           >
             <Github className="w-5 h-5" />
           </a>
+
+          {/* Community user avatar or login */}
+          {communityUser ? (
+            <Link
+              href={`/community/u/${communityUser.username}`}
+              className="flex items-center gap-2 group"
+            >
+              {communityUser.avatar_url ? (
+                <img
+                  src={communityUser.avatar_url}
+                  alt={communityUser.username}
+                  className="w-7 h-7 rounded-full ring-2 ring-white/10
+                    group-hover:ring-violet-500/50 transition-all"
+                />
+              ) : (
+                <div className="w-7 h-7 rounded-full bg-violet-600/30 flex items-center
+                  justify-center text-xs text-violet-400 font-medium
+                  ring-2 ring-white/10 group-hover:ring-violet-500/50 transition-all">
+                  {communityUser.username[0].toUpperCase()}
+                </div>
+              )}
+            </Link>
+          ) : null}
 
           {/* Submit button */}
           <Button asChild size="sm"

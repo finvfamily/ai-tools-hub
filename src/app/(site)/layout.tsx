@@ -1,7 +1,18 @@
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
+import { createServerClient } from '@/lib/supabase/server'
+import { getCommunityUser } from '@/lib/queries/community'
 
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
+export default async function SiteLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createServerClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  let communityUser = null
+  if (user) {
+    const { data } = await getCommunityUser(user.id)
+    communityUser = data
+  }
+
   return (
     <>
       {/* Background glows */}
@@ -14,7 +25,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
           rounded-full bg-violet-800/6 blur-[80px]" />
       </div>
 
-      <Navbar />
+      <Navbar communityUser={communityUser} />
       <main className="min-h-screen w-full">{children}</main>
       <Footer />
     </>

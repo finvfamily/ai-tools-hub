@@ -9,7 +9,7 @@
 [![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E)](https://supabase.com)
 [![Deploy with Vercel](https://img.shields.io/badge/Deploy-Vercel-black)](https://vercel.com)
 
-[**🌐 Live Demo**](https://aitoolshub.com) · [**Submit a Tool**](https://aitoolshub.com/submit) · [**Report Bug**](https://github.com/yourusername/ai-tools-hub/issues)
+[**🌐 Live Demo**](https://aitoolshub.com) · [**Submit a Tool**](https://aitoolshub.com/submit) · [**Report Bug**](https://github.com/finvfamily/ai-tools-hub/issues)
 
 ![AI Tools Hub Homepage](./docs/screenshots/homepage.jpg)
 
@@ -83,7 +83,7 @@ Open an issue titled `[Tool Submission] Tool Name` with the tool URL and a one-l
 ### 1. Clone & install
 
 ```bash
-git clone https://github.com/yourusername/ai-tools-hub.git
+git clone https://github.com/finvfamily/ai-tools-hub.git
 cd ai-tools-hub
 npm install
 ```
@@ -137,7 +137,7 @@ Open [http://localhost:3000](http://localhost:3000) 🎉
 
 ### 6. Deploy to Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/ai-tools-hub)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/finvfamily/ai-tools-hub)
 
 Add the same environment variables in Vercel project settings, and you're live.
 
@@ -216,6 +216,6 @@ If this project helps you, a ⭐ on GitHub means a lot!
 
 <div align="center">
 
-[⭐ Star this repo](https://github.com/yourusername/ai-tools-hub) · [🐛 Report Bug](https://github.com/yourusername/ai-tools-hub/issues) · [💡 Suggest Feature](https://github.com/yourusername/ai-tools-hub/issues)
+[⭐ Star this repo](https://github.com/finvfamily/ai-tools-hub) · [🐛 Report Bug](https://github.com/finvfamily/ai-tools-hub/issues) · [💡 Suggest Feature](https://github.com/finvfamily/ai-tools-hub/issues)
 
 </div>
